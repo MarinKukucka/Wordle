@@ -1,26 +1,116 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import "./App.css";
+import { WORDS as EnglishWords } from "./config/wordList/english/words";
+import { WORDS as CroatianWords } from "./config/wordList/croatian/words";
+import { BACKSPACE, ENTER, NUMBER_OF_GUESSES } from "./config/constants";
+import Board from "./components/Board/Board";
+import Header from "./components/Header/Header";
+import GameOver from "./components/GameOver/GameOver";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [words, setWords] = useState<string[]>([]);
+    const [solution, setSolution] = useState<string>("");
+    const [guesses, setGuesses] = useState<(string | undefined)[]>(
+        Array(NUMBER_OF_GUESSES).fill(undefined)
+    );
+    const [currentGuess, setCurrentGuess] = useState<string>("");
+    const [isGameOver, setIsGameOver] = useState<boolean>(false);
+    const [language, setLanguage] = useState<string>("English");
+
+    useEffect(() => {
+        setWords(language === "English" ? EnglishWords : CroatianWords);
+
+        setSolution(words[Math.floor(Math.random() * words.length)]);
+    }, [language, words]);
+
+    useEffect(() => {
+        const handleUserKeyPress = (event: KeyboardEvent) => {
+            if (event.key === BACKSPACE) {
+                setCurrentGuess((prev) => prev.slice(0, -1));
+
+                return;
+            }
+
+            if (event.key === ENTER) {
+                if (currentGuess.toUpperCase() === solution) {
+                    setIsGameOver(true);
+
+                    return;
+                }
+
+                if (currentGuess.length < 5) return;
+
+                if (!words.includes(currentGuess.toUpperCase())) return;
+
+                const nextEmptyIndex = guesses.findIndex(
+                    (guess) => guess === undefined
+                );
+
+                setGuesses((prev) =>
+                    prev.map((guess, index) =>
+                        index === nextEmptyIndex ? currentGuess : guess
+                    )
+                );
+
+                setCurrentGuess("");
+            }
+
+            if (!/^[a-zA-Z]$/.test(event.key)) return;
+
+            if (currentGuess.length >= 5) return;
+
+            setCurrentGuess((prev) => prev + event.key);
+        };
+
+        if (!isGameOver) {
+            window.addEventListener("keydown", handleUserKeyPress);
+
+            return () => {
+                window.removeEventListener("keydown", handleUserKeyPress);
+            };
+        }
+    }, [
+        currentGuess,
+        currentGuess.length,
+        guesses,
+        isGameOver,
+        solution,
+        words,
+    ]);
+
+    const handleChangeLanguage = useCallback(
+        (event: ChangeEvent<HTMLSelectElement>) => {
+            setLanguage(event.target.value);
+        },
+        []
+    );
+
+    const handleStartNewGame = useCallback(() => {
+        setIsGameOver(false);
+
+        setSolution(words[Math.floor(Math.random() * words.length)]);
+
+        setGuesses(Array(NUMBER_OF_GUESSES).fill(undefined));
+
+        setCurrentGuess("");
+    }, [words]);
+
+    return (
+        <div className="container">
+            {isGameOver ? (
+                <GameOver handleStartNewGame={handleStartNewGame} />
+            ) : (
+                <>
+                    <Header handleChangeLanguage={handleChangeLanguage} />
+                    <Board
+                        guesses={guesses}
+                        currentGuess={currentGuess}
+                        solution={solution}
+                    />
+                </>
+            )}
+        </div>
+    );
 }
 
 export default App;

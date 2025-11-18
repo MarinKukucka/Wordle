@@ -6,6 +6,7 @@ import { BACKSPACE, ENTER, NUMBER_OF_GUESSES } from "./config/constants";
 import Board from "./components/Board/Board";
 import Header from "./components/Header/Header";
 import GameOver from "./components/GameOver/GameOver";
+import Keyboard from "./components/Keyboard/Keyboard";
 
 function App() {
     const [words, setWords] = useState<string[]>([]);
@@ -16,6 +17,7 @@ function App() {
     const [currentGuess, setCurrentGuess] = useState<string>("");
     const [isGameOver, setIsGameOver] = useState<boolean>(false);
     const [language, setLanguage] = useState<string>("English");
+    const [wrongLetters, setWrongLetters] = useState<Set<string>>(new Set());
 
     useEffect(() => {
         setWords(language === "English" ? EnglishWords : CroatianWords);
@@ -95,10 +97,17 @@ function App() {
         setCurrentGuess("");
     }, [words]);
 
+    const handleAddWrongLetter = useCallback((letter: string) => {
+        setWrongLetters((prev) => new Set<string>([...prev, letter]));
+    }, []);
+
     return (
         <div className="container">
             {isGameOver ? (
-                <GameOver handleStartNewGame={handleStartNewGame} />
+                <GameOver
+                    solution={solution}
+                    handleStartNewGame={handleStartNewGame}
+                />
             ) : (
                 <>
                     <Header handleChangeLanguage={handleChangeLanguage} />
@@ -106,7 +115,9 @@ function App() {
                         guesses={guesses}
                         currentGuess={currentGuess}
                         solution={solution}
+                        addWrongLetter={handleAddWrongLetter}
                     />
+                    <Keyboard wrongLetters={wrongLetters} />
                 </>
             )}
         </div>

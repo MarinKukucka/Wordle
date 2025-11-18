@@ -1,0 +1,26 @@
+.keyboardRow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding-bottom: 10px;
+}
+
+.key {
+    border: 1px solid black;
+    height: 40px;
+    width: 30px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.key:hover {
+    background-color: lightblue;
+}
+
+.wrongKey {
+    background-color: grey;
+    pointer-events: none;
+}

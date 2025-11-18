@@ -1,11 +1,12 @@
 interface Props {
+    solution: string;
     handleStartNewGame: () => void;
 }
 
-function GameOver({ handleStartNewGame }: Props) {
+function GameOver({ solution, handleStartNewGame }: Props) {
     return (
         <>
-            <p>CONGRATULATIONS</p>
+            <p>CONGRATULATIONS, THE WORD YOU WERE LOOKING FOR IS: {solution}</p>
             <button onClick={handleStartNewGame}>NEW GAME</button>
         </>
     );

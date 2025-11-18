@@ -6,9 +6,10 @@ interface Props {
     word?: string;
     solution: string;
     isEntered: boolean;
+    addWrongLetter: (letter: string) => void;
 }
 
-function Row({ word, solution, isEntered }: Props) {
+function Row({ word, solution, isEntered, addWrongLetter }: Props) {
     const boxes = useMemo(() => {
         return Array.from({ length: WORD_LENGTH }, (_, i) => {
             let className = "";
@@ -18,8 +19,10 @@ function Row({ word, solution, isEntered }: Props) {
                     className += " " + styles.correct;
                 } else if (word && solution.includes(word[i].toUpperCase())) {
                     className += " " + styles.wrongPosition;
-                } else {
+                } else if (word) {
                     className += " " + styles.wrong;
+
+                    addWrongLetter(word[i].toUpperCase());
                 }
             }
 
@@ -29,7 +32,7 @@ function Row({ word, solution, isEntered }: Props) {
                 </div>
             );
         });
-    }, [isEntered, solution, word]);
+    }, [addWrongLetter, isEntered, solution, word]);
 
     return <div className={styles.row}>{boxes}</div>;
 }

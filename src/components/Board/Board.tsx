@@ -5,9 +5,10 @@ interface Props {
     guesses: (string | undefined)[];
     currentGuess: string;
     solution: string;
+    addWrongLetter: (letter: string) => void;
 }
 
-function Board({ guesses, currentGuess, solution }: Props) {
+function Board({ guesses, currentGuess, solution, addWrongLetter }: Props) {
     return (
         <div className={styles.board}>
             {guesses?.map((guess, index) => {
@@ -23,6 +24,7 @@ function Board({ guesses, currentGuess, solution }: Props) {
                         }
                         solution={solution}
                         isEntered={!!guess}
+                        addWrongLetter={addWrongLetter}
                     />
                 );
             })}

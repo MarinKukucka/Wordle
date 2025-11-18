@@ -17,7 +17,9 @@ function App() {
     const [currentGuess, setCurrentGuess] = useState<string>("");
     const [isGameOver, setIsGameOver] = useState<boolean>(false);
     const [language, setLanguage] = useState<string>("English");
-    const [wrongLetters, setWrongLetters] = useState<Set<string>>(new Set());
+    const [wrongLetters, setWrongLetters] = useState<Set<string>>(
+        new Set<string>()
+    );
 
     useEffect(() => {
         setWords(language === "English" ? EnglishWords : CroatianWords);
@@ -95,6 +97,8 @@ function App() {
         setGuesses(Array(NUMBER_OF_GUESSES).fill(undefined));
 
         setCurrentGuess("");
+
+        setWrongLetters(new Set<string>());
     }, [words]);
 
     const handleAddWrongLetter = useCallback((letter: string) => {

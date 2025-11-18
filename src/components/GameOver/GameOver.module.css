@@ -1,0 +1,12 @@
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.gif{
+    height: 500px;
+    width: 250px;
+}

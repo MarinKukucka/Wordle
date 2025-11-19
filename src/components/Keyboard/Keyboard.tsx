@@ -3,13 +3,14 @@ import styles from "./Keyboard.module.css";
 
 interface Props {
     wrongLetters: Set<string>;
+    handleUserKeyPress: (event: KeyboardEvent) => void;
 }
 
-function Keyboard({ wrongLetters }: Props) {
+function Keyboard({ wrongLetters, handleUserKeyPress }: Props) {
     return (
         <div>
-            {keyboard.map((row) => {
-                const keyboardRow = row.map((key) => {
+            {keyboard.map((row, rowIndex) => {
+                const keyboardRow = row.map((key, keyIndex) => {
                     const isUsedAndWorng = wrongLetters.has(key);
 
                     const className = isUsedAndWorng
@@ -18,15 +19,22 @@ function Keyboard({ wrongLetters }: Props) {
 
                     return (
                         <button
+                            key={keyIndex}
                             className={styles.key + className}
-                            disabled={isUsedAndWorng}
+                            onClick={() =>
+                                handleUserKeyPress({ key } as KeyboardEvent)
+                            }
                         >
                             {key}
                         </button>
                     );
                 });
 
-                return <div className={styles.keyboardRow}>{keyboardRow}</div>;
+                return (
+                    <div key={rowIndex} className={styles.keyboardRow}>
+                        {keyboardRow}
+                    </div>
+                );
             })}
         </div>
     );

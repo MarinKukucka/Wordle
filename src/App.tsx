@@ -2,7 +2,11 @@ import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import "./App.css";
 import { WORDS as EnglishWords } from "./config/wordList/english/words";
 import { WORDS as CroatianWords } from "./config/wordList/croatian/words";
-import { BACKSPACE, ENTER, NUMBER_OF_GUESSES } from "./config/constants";
+import {
+    BACKSPACE_KEYS,
+    ENTER_KEYS,
+    NUMBER_OF_GUESSES,
+} from "./config/constants";
 import Board from "./components/Board/Board";
 import Header from "./components/Header/Header";
 import GameOver from "./components/GameOver/GameOver";
@@ -16,6 +20,7 @@ function App() {
     );
     const [currentGuess, setCurrentGuess] = useState<string>("");
     const [isGameOver, setIsGameOver] = useState<boolean>(false);
+    const [isGameWin, setIsGameWin] = useState<boolean>(false);
     const [language, setLanguage] = useState<string>("English");
     const [wrongLetters, setWrongLetters] = useState<Set<string>>(
         new Set<string>()
@@ -27,17 +32,19 @@ function App() {
         setSolution(words[Math.floor(Math.random() * words.length)]);
     }, [language, words]);
 
-    useEffect(() => {
-        const handleUserKeyPress = (event: KeyboardEvent) => {
-            if (event.key === BACKSPACE) {
+    const handleUserKeyPress = useCallback(
+        (event: KeyboardEvent) => {
+            if (BACKSPACE_KEYS.includes(event.key)) {
                 setCurrentGuess((prev) => prev.slice(0, -1));
 
                 return;
             }
 
-            if (event.key === ENTER) {
+            if (ENTER_KEYS.includes(event.key)) {
                 if (currentGuess.toUpperCase() === solution) {
                     setIsGameOver(true);
+
+                    setIsGameWin(true);
 
                     return;
                 }
@@ -56,6 +63,12 @@ function App() {
                     )
                 );
 
+                if (nextEmptyIndex === NUMBER_OF_GUESSES - 1) {
+                    setIsGameOver(true);
+
+                    setIsGameWin(false);
+                }
+
                 setCurrentGuess("");
             }
 
@@ -64,8 +77,11 @@ function App() {
             if (currentGuess.length >= 5) return;
 
             setCurrentGuess((prev) => prev + event.key);
-        };
+        },
+        [currentGuess, guesses, solution, words]
+    );
 
+    useEffect(() => {
         if (!isGameOver) {
             window.addEventListener("keydown", handleUserKeyPress);
 
@@ -77,6 +93,7 @@ function App() {
         currentGuess,
         currentGuess.length,
         guesses,
+        handleUserKeyPress,
         isGameOver,
         solution,
         words,
@@ -110,6 +127,7 @@ function App() {
             {isGameOver ? (
                 <GameOver
                     solution={solution}
+                    isGameWin={isGameWin}
                     handleStartNewGame={handleStartNewGame}
                 />
             ) : (
@@ -121,7 +139,10 @@ function App() {
                         solution={solution}
                         addWrongLetter={handleAddWrongLetter}
                     />
-                    <Keyboard wrongLetters={wrongLetters} />
+                    <Keyboard
+                        wrongLetters={wrongLetters}
+                        handleUserKeyPress={handleUserKeyPress}
+                    />
                 </>
             )}
         </div>

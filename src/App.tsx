@@ -5,12 +5,14 @@ import { WORDS as CroatianWords } from "./config/wordList/croatian/words";
 import {
     BACKSPACE_KEYS,
     ENTER_KEYS,
+    keyboard,
     NUMBER_OF_GUESSES,
 } from "./config/constants";
 import Board from "./components/Board/Board";
 import Header from "./components/Header/Header";
 import GameOver from "./components/GameOver/GameOver";
 import Keyboard from "./components/Keyboard/Keyboard";
+import Hints from "./components/Hints/Hints";
 
 function App() {
     const [words, setWords] = useState<string[]>([]);
@@ -25,6 +27,8 @@ function App() {
     const [wrongLetters, setWrongLetters] = useState<Set<string>>(
         new Set<string>()
     );
+    const [isExposeUsed, setIsExposeUsed] = useState(false);
+    const [isRemoveUsed, setIsRemoveUsed] = useState(false);
 
     useEffect(() => {
         setWords(language === "English" ? EnglishWords : CroatianWords);
@@ -122,6 +126,27 @@ function App() {
         setWrongLetters((prev) => new Set<string>([...prev, letter]));
     }, []);
 
+    const handleRemoveWrongLetterFromKeyboard = useCallback(() => {
+        const availaibleLetters = keyboard
+            .flat()
+            .filter(
+                (key) =>
+                    key !== "←" &&
+                    key !== "⏎" &&
+                    !wrongLetters.has(key) &&
+                    !solution.includes(key)
+            );
+
+        const letterToRemove =
+            availaibleLetters[
+                Math.floor(Math.random() * availaibleLetters.length)
+            ];
+
+        setWrongLetters((prev) => new Set<string>([...prev, letterToRemove]));
+
+        setIsRemoveUsed(true);
+    }, [solution, wrongLetters]);
+
     return (
         <div className="container">
             {isGameOver ? (
@@ -133,12 +158,24 @@ function App() {
             ) : (
                 <>
                     <Header handleChangeLanguage={handleChangeLanguage} />
-                    <Board
-                        guesses={guesses}
-                        currentGuess={currentGuess}
-                        solution={solution}
-                        addWrongLetter={handleAddWrongLetter}
-                    />
+                    <div className="board-container">
+                        <div className="spacer" />
+                        <Board
+                            guesses={guesses}
+                            currentGuess={currentGuess}
+                            solution={solution}
+                            addWrongLetter={handleAddWrongLetter}
+                        />
+                        <div className="spacer">
+                            <Hints
+                                isExposeUsed={isExposeUsed}
+                                isRemoveUsed={isRemoveUsed}
+                                handleRemoveWrongLetterFromKeyboard={
+                                    handleRemoveWrongLetterFromKeyboard
+                                }
+                            />
+                        </div>
+                    </div>
                     <Keyboard
                         wrongLetters={wrongLetters}
                         handleUserKeyPress={handleUserKeyPress}

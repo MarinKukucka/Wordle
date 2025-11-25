@@ -4,3 +4,13 @@
     height: 100vh;
     width: 100vw;
 }
+
+.board-container {
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.spacer {
+    width: 20%;
+}

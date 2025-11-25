@@ -7,6 +7,7 @@ import {
     ENTER_KEYS,
     keyboard,
     NUMBER_OF_GUESSES,
+    WORD_LENGTH,
 } from "./config/constants";
 import Board from "./components/Board/Board";
 import Header from "./components/Header/Header";
@@ -28,6 +29,7 @@ function App() {
         new Set<string>()
     );
     const [isExposeUsed, setIsExposeUsed] = useState(false);
+    const [exposedHint, setExposedHint] = useState<[number, string]>();
     const [isRemoveUsed, setIsRemoveUsed] = useState(false);
 
     useEffect(() => {
@@ -147,6 +149,36 @@ function App() {
         setIsRemoveUsed(true);
     }, [solution, wrongLetters]);
 
+    const handleExposeCorrectLetter = useCallback(() => {
+        const unexposedLetterIndexes = [];
+
+        for (let i = 0; i < WORD_LENGTH; i++) {
+            let hasCorrectLetter = false;
+
+            for (let j = 0; j < guesses.length; j++) {
+                if (guesses[j]?.[i] === solution[i]) {
+                    hasCorrectLetter = true;
+                    break;
+                }
+            }
+
+            if (!hasCorrectLetter) {
+                unexposedLetterIndexes.push(i);
+            }
+        }
+
+        const randomIndex =
+            unexposedLetterIndexes[
+                Math.floor(Math.random() * unexposedLetterIndexes.length)
+            ];
+
+        const letterToExpose = solution[randomIndex];
+
+        setExposedHint([randomIndex, letterToExpose]);
+
+        setIsExposeUsed(true);
+    }, [guesses, solution]);
+
     return (
         <div className="container">
             {isGameOver ? (
@@ -169,7 +201,11 @@ function App() {
                         <div className="spacer">
                             <Hints
                                 isExposeUsed={isExposeUsed}
+                                exposedHint={exposedHint}
                                 isRemoveUsed={isRemoveUsed}
+                                handleExposeCorrectLetter={
+                                    handleExposeCorrectLetter
+                                }
                                 handleRemoveWrongLetterFromKeyboard={
                                     handleRemoveWrongLetterFromKeyboard
                                 }

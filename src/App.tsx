@@ -28,9 +28,9 @@ function App() {
     const [wrongLetters, setWrongLetters] = useState<Set<string>>(
         new Set<string>()
     );
-    const [isExposeUsed, setIsExposeUsed] = useState(false);
+    const [isExposeUsed, setIsExposeUsed] = useState<boolean>(false);
     const [exposedHint, setExposedHint] = useState<[number, string]>();
-    const [isRemoveUsed, setIsRemoveUsed] = useState(false);
+    const [removeUsed, setRemoveUsed] = useState<number>(0);
 
     useEffect(() => {
         setWords(language === "English" ? EnglishWords : CroatianWords);
@@ -122,6 +122,12 @@ function App() {
         setCurrentGuess("");
 
         setWrongLetters(new Set<string>());
+
+        setIsExposeUsed(false);
+
+        setExposedHint(undefined);
+
+        setRemoveUsed(0);
     }, [words]);
 
     const handleAddWrongLetter = useCallback((letter: string) => {
@@ -146,7 +152,7 @@ function App() {
 
         setWrongLetters((prev) => new Set<string>([...prev, letterToRemove]));
 
-        setIsRemoveUsed(true);
+        setRemoveUsed((prev) => prev + 1);
     }, [solution, wrongLetters]);
 
     const handleExposeCorrectLetter = useCallback(() => {
@@ -202,7 +208,7 @@ function App() {
                             <Hints
                                 isExposeUsed={isExposeUsed}
                                 exposedHint={exposedHint}
-                                isRemoveUsed={isRemoveUsed}
+                                removeUsed={removeUsed}
                                 handleExposeCorrectLetter={
                                     handleExposeCorrectLetter
                                 }

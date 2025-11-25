@@ -3,7 +3,7 @@ import styles from "./Hints.module.css";
 interface Props {
     isExposeUsed: boolean;
     exposedHint?: [number, string];
-    isRemoveUsed: boolean;
+    removeUsed: number;
     handleExposeCorrectLetter: () => void;
     handleRemoveWrongLetterFromKeyboard: () => void;
 }
@@ -11,7 +11,7 @@ interface Props {
 function Hints({
     isExposeUsed,
     exposedHint,
-    isRemoveUsed,
+    removeUsed,
     handleExposeCorrectLetter,
     handleRemoveWrongLetterFromKeyboard,
 }: Props) {
@@ -29,7 +29,7 @@ function Hints({
             )}
             <button
                 onClick={handleRemoveWrongLetterFromKeyboard}
-                hidden={isRemoveUsed}
+                hidden={removeUsed >= 2}
             >
                 Remove 1 wrong letter
             </button>

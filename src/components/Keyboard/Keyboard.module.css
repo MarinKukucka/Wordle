@@ -9,22 +9,27 @@
 .key {
     border: 1px solid black;
     height: 40px;
-    width: 30px;
-    align-items: center;
+    width: 32px;
+    border-radius: 4px;
+    background-color: #e5e7eb;
+    font-weight: 600;
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+    user-select: none;
 }
 
+
 .key:hover {
-    background-color: lightblue;
+    background-color: #dbeafe;
 }
 
 .key:active {
-    box-shadow: 0 3px #666;
-    transform: translateY(3px);
+    transform: translateY(2px);
 }
 
 .wrongKey {
     background-color: grey;
+    color: #f9fafb;
 }

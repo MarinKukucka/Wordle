@@ -25,7 +25,7 @@ function Hints({
                     onClick={handleExposeCorrectLetter}
                     hidden={isExposeUsed}
                 >
-                    Expose 1 correct letter
+                    Expose one correct letter
                 </button>
             )}
             <button
@@ -33,7 +33,7 @@ function Hints({
                 onClick={handleRemoveWrongLetterFromKeyboard}
                 hidden={removeUsed >= 2}
             >
-                Remove 1 wrong letter
+                Remove {removeUsed === 0 ? "first" : "second"} wrong letter
             </button>
         </div>
     );

@@ -1,9 +1,10 @@
 .hintButtonContainer {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     flex-direction: column;
-    gap: 50px;
+    gap: 40px;
+    height: 30%;
 }
 
 .button {

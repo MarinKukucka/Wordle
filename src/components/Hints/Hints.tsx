@@ -26,7 +26,9 @@ function Hints({
             </button>
 
             {isExposeUsed && exposedHint ? (
-                `Letter ${exposedHint[1]} is at position ${exposedHint[0] + 1}`
+                <div className={styles.hintBox}>
+                    Letter {exposedHint[1]} is at position {exposedHint[0] + 1}
+                </div>
             ) : (
                 <button
                     className={styles.button}

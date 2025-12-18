@@ -17,6 +17,14 @@ function Hints({
 }: Props) {
     return (
         <div className={styles.hintButtonContainer}>
+            <button
+                className={styles.button}
+                onClick={handleRemoveWrongLetterFromKeyboard}
+                hidden={removeUsed >= 2}
+            >
+                Remove {removeUsed === 0 ? "first" : "second"} wrong letter
+            </button>
+
             {isExposeUsed && exposedHint ? (
                 `Letter ${exposedHint[1]} is at position ${exposedHint[0] + 1}`
             ) : (
@@ -28,13 +36,6 @@ function Hints({
                     Expose one correct letter
                 </button>
             )}
-            <button
-                className={styles.button}
-                onClick={handleRemoveWrongLetterFromKeyboard}
-                hidden={removeUsed >= 2}
-            >
-                Remove {removeUsed === 0 ? "first" : "second"} wrong letter
-            </button>
         </div>
     );
 }

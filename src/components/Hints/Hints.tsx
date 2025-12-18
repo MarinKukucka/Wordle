@@ -21,6 +21,7 @@ function Hints({
                 `Letter ${exposedHint[1]} is at position ${exposedHint[0] + 1}`
             ) : (
                 <button
+                    className={styles.button}
                     onClick={handleExposeCorrectLetter}
                     hidden={isExposeUsed}
                 >
@@ -28,6 +29,7 @@ function Hints({
                 </button>
             )}
             <button
+                className={styles.button}
                 onClick={handleRemoveWrongLetterFromKeyboard}
                 hidden={removeUsed >= 2}
             >

@@ -9,6 +9,7 @@ Try it live: <https://wordle-alpha-vert.vercel.app/>
 ## Features
 - Classic Wordle mechanics: 6 guesses, feedback by letter (correct / present / absent)
 - Dictionary with over 3500 english words
+- Explanation of solution on end screen
 - Keyboard + mobile-friendly controls
 - Unlimited play
 
@@ -25,10 +26,6 @@ cd Wordle
 
 # install
 npm install
-# or
-yarn install
 
 # start dev server
-npm run dev
-# or
 npm start

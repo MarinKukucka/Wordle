@@ -196,28 +196,23 @@ function App() {
             ) : (
                 <>
                     <Header handleChangeLanguage={handleChangeLanguage} />
-                    <div className="board-container">
-                        <div className="spacer" />
-                        <Board
-                            guesses={guesses}
-                            currentGuess={currentGuess}
-                            solution={solution}
-                            addWrongLetter={handleAddWrongLetter}
-                        />
-                        <div className="spacer">
-                            <Hints
-                                isExposeUsed={isExposeUsed}
-                                exposedHint={exposedHint}
-                                removeUsed={removeUsed}
-                                handleExposeCorrectLetter={
-                                    handleExposeCorrectLetter
-                                }
-                                handleRemoveWrongLetterFromKeyboard={
-                                    handleRemoveWrongLetterFromKeyboard
-                                }
-                            />
-                        </div>
-                    </div>
+
+                    <Hints
+                        isExposeUsed={isExposeUsed}
+                        exposedHint={exposedHint}
+                        removeUsed={removeUsed}
+                        handleExposeCorrectLetter={handleExposeCorrectLetter}
+                        handleRemoveWrongLetterFromKeyboard={
+                            handleRemoveWrongLetterFromKeyboard
+                        }
+                    />
+                    <Board
+                        guesses={guesses}
+                        currentGuess={currentGuess}
+                        solution={solution}
+                        addWrongLetter={handleAddWrongLetter}
+                    />
+
                     <Keyboard
                         wrongLetters={wrongLetters}
                         handleUserKeyPress={handleUserKeyPress}

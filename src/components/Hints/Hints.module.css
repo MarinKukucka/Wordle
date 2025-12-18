@@ -1,8 +1,28 @@
 .hintButtonContainer {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     flex-direction: column;
-    height: 100%;
-    gap: 50px;
+    gap: 40px;
+    height: 30%;
+}
+
+.hintBox {
+    background-color: lightgrey;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.button {
+    background: #6aaa64;
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.button:hover {
+    background: #5c9e58;
 }
